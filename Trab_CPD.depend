@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1680636586 source:c:\users\watts\desktop\trab_cpd\trab_cpd\main.cpp
+	<iostream>
+	<tuple>
+	<string>
+	<vector>
+	<unordered_map>
+	<bits/stdc++.h>
+	<map>
+	<chrono>
+
