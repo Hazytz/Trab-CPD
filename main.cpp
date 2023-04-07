@@ -6,25 +6,18 @@
 #include<bits/stdc++.h>
 #include<map>
 #include<chrono>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<unistd.h>
 
-// Struct para cada informação para pesquisa
-struct info_t
-{
-    int n;
-    char alimento[50];
-    char tipoVenda[20];
-    char pais[20];
-    char mercado[20];
-    float anual;
-    float pos_pandemia;
-};
-typedef struct info_t info;
+#include "tabela.h"
+
 
 int main()
 {
     info tmp;
 
-    FILE *entrada, *saida;
+    FILE *entrada, *data, *data2;
 
     setlocale(LC_ALL,"");
 
@@ -32,18 +25,25 @@ int main()
 
     // Abrir os arquivos
     entrada = fopen("dom_change_percent.csv", "r");
-    saida = fopen("search_file.bin", "wb");
+    data = fopen("data_file.bin", "wb");
     if (entrada == NULL) //se n�o conseguiu abrir o arquivo
     {
         printf ("Erro ao abrir o arquivo dom_change_percent.csv");
         return -1;
     }
-    if (saida == NULL) //se n�o conseguiu abrir o arquivo
+    if (data == NULL) //se n�o conseguiu abrir o arquivo
     {
         printf ("Erro ao abrir o arquivo search_file.bin");
         return -1;
     }
 
+    struct stat st = {0};
+
+    if(stat("search_files", &st) == -1)
+        mkdir("search_files");
+    chdir("search_files");
+
+    printf("Carregando...");
     // Leitura dos dados
     while (fgets(linha,100,entrada))
     {
@@ -76,20 +76,19 @@ int main()
         }
         palavra = strtok(NULL, ",");
         tmp.anual = strtof(palavra, &ptr);
-        fwrite(&tmp, sizeof(info), 1, saida);
+        fwrite(&tmp, sizeof(info), 1, data);
+        incluirTabela(tmp.alimento, 0, tmp.n);
     }
     fclose(entrada);
-    fclose(saida);
+    fclose(data);
 
-
-    // Teste para ver se os dados foram salvos no arquivo binario
-    saida = fopen("search_file.bin", "rb");
-
-    while(fread(&tmp, sizeof(info), 1, saida))
-    {
-        printf("%d, %s, %s, %s, %s, %f, %f\n", tmp.n, tmp.pais, tmp.tipoVenda, tmp.mercado, tmp.alimento, tmp.pos_pandemia, tmp.anual);
-    }
-
-
+    char word[50];
+    printf("\rDigite o nome do alimento: ");
+    fgets(word, sizeof(word), stdin);
+    printf("\r");
+    chdir("..");
+    data2 = fopen("data_file.bin", "rb");
+    chdir("search_files");
+    pesquisa(word, 0, data2);
     return 0;
 }

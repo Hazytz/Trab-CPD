@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="main.cpp" />
+		<Unit filename="tabela.cpp" />
+		<Unit filename="tabela.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

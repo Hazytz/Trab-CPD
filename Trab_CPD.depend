@@ -9,3 +9,33 @@
 	<map>
 	<chrono>
 
+1680909502 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\main.cpp
+	<iostream>
+	<tuple>
+	<string>
+	<vector>
+	<unordered_map>
+	<bits/stdc++.h>
+	<map>
+	<chrono>
+	<sys/types.h>
+	<sys/stat.h>
+	<unistd.h>
+	"tabela.h"
+
+1680908620 c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.h
+	<iostream>
+	<tuple>
+	<string>
+	<vector>
+	<unordered_map>
+	<bits/stdc++.h>
+	<map>
+	<chrono>
+	<sys/types.h>
+	<sys/stat.h>
+	<unistd.h>
+
+1680909154 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.cpp
+	"tabela.h"
+
