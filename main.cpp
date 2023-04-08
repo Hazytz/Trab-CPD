@@ -10,45 +10,54 @@
 #include<sys/stat.h>
 #include<unistd.h>
 #include<conio.h>
+#include<filesystem>
 
 #include "tabela.h"
 
-
 int main()
 {
-    int entries_n = 0;
-
     info tmp;
 
-    FILE *entrada, *data, *data2;
+    FILE *entrada, *data, *data2, *n;
+
+    n = fopen("n.bin", "rb");
+
+    int entries_n;
+
+
+    if(!fread(&entries_n, sizeof(int), 1, n))
+        entries_n = 0;
+
+
+    std::string inputPath = "./search_files";
+    const std::filesystem::path path = inputPath;
 
     setlocale(LC_ALL,"");
 
     char linha[500], *palavra, *ptr;
 
-    int menu;
+    int menu, code_switch = 0, code;;
 
-    struct stat st = {0};
-    if(stat("search_files", &st) == -1)
-        mkdir("search_files");
-
-    char word[50], filename1[] = "search_file.bin", filename2[] = "search_file_pais.bin";
+    char word[50], filename1[] = "search_file.bin", filename2[] = "search_file_pais.bin", filename3[] = "data_file.bin";
 
     while(1)
     {
         system ("cls");
-        printf("1 - Recarregar o arquivo\n2 - Pesquisa por nome de alimento\n3 - Pesquisa por pais\n4 - Adicionar dado\n");
-        scanf("%d", &menu);
-
+        printf("Pressione uma das seguintes teclas:\n1 - Reset\n2 - Pesquisa por nome de alimento\n3 - Pesquisa por pais\n4 - Adicionar dado\n5 - Alterar Dado\n6 - Exibir codigo/Parar de exibir codigo dos dados");
+        menu = getch() - '0';
         system ("cls");
         switch (menu)
         {
         case 1:
+            printf("Carregando...");
+            unlink("data_file.bin");
+            remove_all(path);
              // Abrir os arquivos
             entrada = fopen("dom_change_percent.csv", "r");
             data = fopen("data_file.bin", "wb");
             // Leitura dos dados
-            printf("Carregando...");
+            entries_n = 0;
+            mkdir("search_files");
             chdir("search_files");
             while (fgets(linha,100,entrada))
             {
@@ -89,6 +98,9 @@ int main()
             fclose(entrada);
             fclose(data);
             chdir("..");
+            n = fopen("n.bin", "rb");
+            fwrite(&entries_n, sizeof(int), 1, n);
+            fclose(n);
             break;
         case 2:
             fflush(stdin);
@@ -97,7 +109,7 @@ int main()
             system ("cls");
             data2 = fopen("data_file.bin", "rb");
             chdir("search_files");
-            pesquisa(word, 0, data2,filename1);
+            pesquisa(word, 0, data2,filename1, code_switch);
             fclose(data2);
             getch();
             chdir("..");
@@ -109,7 +121,7 @@ int main()
             system ("cls");
             data2 = fopen("data_file.bin", "rb");
             chdir("search_files");
-            pesquisa(word, 0, data2,filename2);
+            pesquisa(word, 0, data2,filename2, code_switch);
             fclose(data2);
             getch();
             chdir("..");
@@ -147,6 +159,17 @@ int main()
             chdir("..");
             entries_n++;
             system ("cls");
+            break;
+        case 5:
+            printf("Digite o codigo do dado a ser alterado: ");
+            scanf("%d", &code);
+            alterarDado(code, filename3);
+            break;
+        case 6:
+            if(code_switch == 0)
+                code_switch = 1;
+            else
+                code_switch = 0;
             break;
         }
     }

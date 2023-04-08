@@ -114,7 +114,7 @@ void incluirTabela(char *word, int iteration, int code, char *name)
 
 }
 
-void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
+void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n, int code_switch)
 {
     int len = strlen(word);
     if(iteration < len)
@@ -130,7 +130,7 @@ void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
                 if(!stat(dirnam, &st))
                 {
                     chdir(dirnam);
-                    pesquisa(word, iteration+1, dados, tabela_n);
+                    pesquisa(word, iteration+1, dados, tabela_n, code_switch);
                     chdir("..");
                     return;
                 }
@@ -143,7 +143,7 @@ void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
             if(!stat(dirnam, &st))
             {
                 chdir(dirnam);
-                pesquisa(word, iteration+1, dados, tabela_n);
+                pesquisa(word, iteration+1, dados, tabela_n, code_switch);
                 chdir("..");
                 return;
             }
@@ -155,7 +155,7 @@ void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
             if(!stat(dirnam, &st))
             {
                 chdir(dirnam);
-                pesquisa(word, iteration+1, dados, tabela_n);
+                pesquisa(word, iteration+1, dados, tabela_n, code_switch);
                 chdir("..");
                 return;
             }
@@ -180,12 +180,29 @@ void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
         fseek(dados, code*sizeof(info), SEEK_SET);
         fread(&tmp, sizeof(info), 1, dados);
         if(!strcmp(tabela_n, file1))
-            printf("%s, %s, %s, %s, %f, %f\n", tmp.alimento, tmp.pais, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
+            printf("%s, %s, %s, %s, %f, %f", tmp.alimento, tmp.pais, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
         else if(!strcmp(tabela_n, file2))
-            printf("%s, %s, %s, %s, %f, %f\n", tmp.pais, tmp.alimento, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
+            printf("%s, %s, %s, %s, %f, %f", tmp.pais, tmp.alimento, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
+        if(code_switch == 1)
+            printf(", %d\n", tmp.n);
+        else
+            printf("\n");
     }
     fclose(tabela);
 
 }
 
 
+void alterarDado(int code, char *name)
+{
+    FILE *dados;
+    info tmp;
+    dados = fopen(name,"rb+");
+    fseek(dados, code*sizeof(info), SEEK_SET);
+    fread(&tmp, sizeof(info), 1, dados);
+    fseek(dados, code*sizeof(info), SEEK_SET);
+    printf("%s, %s, %s, %s, ", tmp.alimento, tmp.pais, tmp.tipoVenda, tmp.mercado);
+    scanf("%f, %f", &tmp.pos_pandemia, &tmp.anual);
+    fwrite(&tmp, sizeof(info), 1, dados);
+    fclose(dados);
+}
