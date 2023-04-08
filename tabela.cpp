@@ -1,7 +1,7 @@
 #include "tabela.h"
 
 
-void incluirTabela(char *word, int iteration, int code)
+void incluirTabela(char *word, int iteration, int code, char *name)
 {
     FILE *tabela_1;
     int len = strlen(word), cod, s = 0;
@@ -11,7 +11,7 @@ void incluirTabela(char *word, int iteration, int code)
         {
             if(word[iteration] == 65+i || word[iteration] == 97+i)
             {
-                tabela_1 = fopen("search_file.bin", "rb");
+                tabela_1 = fopen(name, "rb");
                 while(fread(&cod, sizeof(int), 1, tabela_1))
                 {
                     if(cod == code)
@@ -20,7 +20,7 @@ void incluirTabela(char *word, int iteration, int code)
                 fclose(tabela_1);
                 if(s == 0)
                 {
-                    tabela_1 = fopen("search_file.bin", "ab");
+                    tabela_1 = fopen(name, "ab");
                     fwrite(&code, sizeof(int), 1, tabela_1);
                     fclose(tabela_1);
                     struct stat st = {0};
@@ -31,20 +31,80 @@ void incluirTabela(char *word, int iteration, int code)
                     {
                         mkdir(dirnam);
                         chdir(dirnam);
-                        incluirTabela(word, iteration+1, code);
+                        incluirTabela(word, iteration+1, code, name);
                         chdir("..");
                         return;
                     }
                     chdir(dirnam);
-                    incluirTabela(word, iteration+1, code);
+                    incluirTabela(word, iteration+1, code, name);
                     chdir("..");
                 }
                 return;
             }
         }
+        if(word[iteration] == 32)
+        {
+            tabela_1 = fopen(name, "rb");
+            while(fread(&cod, sizeof(int), 1, tabela_1))
+            {
+                if(cod == code)
+                    s = 1;
+            }
+            fclose(tabela_1);
+            if(s == 0)
+            {
+                tabela_1 = fopen(name, "ab");
+                fwrite(&code, sizeof(int), 1, tabela_1);
+                fclose(tabela_1);
+                struct stat st = {0};
+                char dirnam[] = "./SPACE";
+                if(stat(dirnam, &st) == -1)
+                {
+                    mkdir(dirnam);
+                    chdir(dirnam);
+                    incluirTabela(word, iteration+1, code, name);
+                    chdir("..");
+                    return;
+                }
+                chdir(dirnam);
+                incluirTabela(word, iteration+1, code, name);
+                chdir("..");
+            }
+            return;
+        }
+        else if(word[iteration] == 39)
+        {
+            tabela_1 = fopen(name, "rb");
+            while(fread(&cod, sizeof(int), 1, tabela_1))
+            {
+                if(cod == code)
+                    s = 1;
+            }
+            fclose(tabela_1);
+            if(s == 0)
+            {
+                tabela_1 = fopen(name, "ab");
+                fwrite(&code, sizeof(int), 1, tabela_1);
+                fclose(tabela_1);
+                struct stat st = {0};
+                char dirnam[] = "./'";
+                if(stat(dirnam, &st) == -1)
+                {
+                    mkdir(dirnam);
+                    chdir(dirnam);
+                    incluirTabela(word, iteration+1, code, name);
+                    chdir("..");
+                    return;
+                }
+                chdir(dirnam);
+                incluirTabela(word, iteration+1, code, name);
+                chdir("..");
+            }
+            return;
+        }
     }
 
-    tabela_1 = fopen("search_file.bin", "ab");
+    tabela_1 = fopen(name, "ab");
 
     fwrite(&code, sizeof(int), 1, tabela_1);
     fclose(tabela_1);
@@ -54,7 +114,7 @@ void incluirTabela(char *word, int iteration, int code)
 
 }
 
-void pesquisa(char *word, int iteration, FILE *dados)
+void pesquisa(char *word, int iteration, FILE *dados, char *tabela_n)
 {
     int len = strlen(word);
     if(iteration < len)
@@ -64,19 +124,43 @@ void pesquisa(char *word, int iteration, FILE *dados)
             if(word[iteration] == 65+i || word[iteration] == 97+i)
             {
                 struct stat st = {0};
-                char dirnam[3] = "./";
+                char dirnam[] = "./";
                 char dirletter = 65+i;
                 strncat(dirnam,  &dirletter, 1);
                 if(!stat(dirnam, &st))
                 {
                     chdir(dirnam);
-                    pesquisa(word, iteration+1, dados);
+                    pesquisa(word, iteration+1, dados, tabela_n);
                     chdir("..");
                     return;
                 }
             }
         }
-        if(word[iteration] != '\n')
+        if(word[iteration] == 32)
+        {
+            struct stat st = {0};
+            char dirnam[] = "./SPACE";
+            if(!stat(dirnam, &st))
+            {
+                chdir(dirnam);
+                pesquisa(word, iteration+1, dados, tabela_n);
+                chdir("..");
+                return;
+            }
+        }
+        else if(word[iteration] == 39)
+        {
+            struct stat st = {0};
+            char dirnam[] = "./'";
+            if(!stat(dirnam, &st))
+            {
+                chdir(dirnam);
+                pesquisa(word, iteration+1, dados, tabela_n);
+                chdir("..");
+                return;
+            }
+        }
+        else if(word[iteration] != '\n')
         {
             printf("Nenhum resultado encontrado\n");
             return;
@@ -85,15 +169,20 @@ void pesquisa(char *word, int iteration, FILE *dados)
 
     FILE *tabela;
     int code;
-    tabela = fopen("search_file.bin","rb");
+    tabela = fopen(tabela_n,"rb");
 
     info tmp;
+
+    char file1[] = "search_file.bin", file2[] = "search_file_pais.bin";
 
     while(fread(&code, sizeof(int), 1, tabela))
     {
         fseek(dados, code*sizeof(info), SEEK_SET);
         fread(&tmp, sizeof(info), 1, dados);
-        printf("%s, %s, %s, %s, %f, %f\n", tmp.alimento, tmp.pais, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
+        if(!strcmp(tabela_n, file1))
+            printf("%s, %s, %s, %s, %f, %f\n", tmp.alimento, tmp.pais, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
+        else if(!strcmp(tabela_n, file2))
+            printf("%s, %s, %s, %s, %f, %f\n", tmp.pais, tmp.alimento, tmp.tipoVenda, tmp.mercado, tmp.pos_pandemia, tmp.anual);
     }
     fclose(tabela);
 

@@ -9,7 +9,7 @@
 	<map>
 	<chrono>
 
-1680909502 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\main.cpp
+1680925042 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\main.cpp
 	<iostream>
 	<tuple>
 	<string>
@@ -21,9 +21,10 @@
 	<sys/types.h>
 	<sys/stat.h>
 	<unistd.h>
+	<conio.h>
 	"tabela.h"
 
-1680908620 c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.h
+1680921483 c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.h
 	<iostream>
 	<tuple>
 	<string>
@@ -36,6 +37,6 @@
 	<sys/stat.h>
 	<unistd.h>
 
-1680909154 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.cpp
+1680925620 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.cpp
 	"tabela.h"
 

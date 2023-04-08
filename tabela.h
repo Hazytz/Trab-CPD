@@ -23,6 +23,6 @@ struct info_t
 };
 typedef struct info_t info;
 
-void incluirTabela(char *word, int iteration, int code);
+void incluirTabela(char *word, int iteration, int code, char *name);
 
-void pesquisa(char *word, int iteration, FILE *dados);
+void pesquisa(char *word, int iteration, FILE *dados, char *tabela);
