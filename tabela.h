@@ -9,6 +9,8 @@
 #include<sys/types.h>
 #include<sys/stat.h>
 #include<unistd.h>
+#include<conio.h>
+#include<filesystem>
 
 // Struct para cada informação para pesquisa
 struct info_t
@@ -25,6 +27,8 @@ typedef struct info_t info;
 
 void incluirTabela(char *word, int iteration, int code, char *name);
 
-void pesquisa(char *word, int iteration, FILE *dados, char *tabela, int code_switch);
+void pesquisa(char *word, int iteration, FILE *dados, char *tabela, int code_switch, int order);
 
 void alterarDado(int code, char *name);
+
+void orderedPrint(FILE *dados, char *tabela_n, int code_switch, int order);

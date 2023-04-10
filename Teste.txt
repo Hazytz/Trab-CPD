@@ -1,0 +1,5 @@
+0,Brazil,Retail,São Paulo,Beans (black),2314,4235
+1,AAAAAAA,Retail,AAAAAAAFAS,Beans (black),2314,23
+2,AAAAAAB,Retail,AAAAAAAFHG,Beans (black),34,45
+3,AAAAAAC,Retail,AAAAAAAFD,Beans (black),21,235
+4,AAAAAAAF,Retail,AAAAAAAF,Beans (black),31,435

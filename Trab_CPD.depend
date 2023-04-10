@@ -40,7 +40,7 @@
 1680925620 source:c:\users\watts\desktop\faculdade\trab_cpd\trab_cpd\tabela.cpp
 	"tabela.h"
 
-1680986729 source:e:\trab_cpd\main.cpp
+1681089111 source:e:\trab_cpd\main.cpp
 	<iostream>
 	<tuple>
 	<string>
@@ -56,7 +56,7 @@
 	<filesystem>
 	"tabela.h"
 
-1680986478 e:\trab_cpd\tabela.h
+1681089376 e:\trab_cpd\tabela.h
 	<iostream>
 	<tuple>
 	<string>
@@ -68,8 +68,10 @@
 	<sys/types.h>
 	<sys/stat.h>
 	<unistd.h>
+	<conio.h>
+	<filesystem>
 
-1680986825 source:e:\trab_cpd\tabela.cpp
+1681090124 source:e:\trab_cpd\tabela.cpp
 	"tabela.h"
 
 1680975504 source:e:\trab_cpd\imgui\imgui.cpp
